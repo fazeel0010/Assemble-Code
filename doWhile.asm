@@ -1,36 +1,30 @@
 section .data
-    array dw 12, 1003, 6543, 24680, 789, 30123, 32766    ; 16-bit array
-    even  dw 7                                         ; Reserve space for 7 16-bit elements
-    hex dw 0
+	array times 7 dw 12, 1003, 6543, 24680, 789, 30123, 32766 	; declare static array
+	even_array times 7 dw 0 						; declare empty array for even
 
 section .text
-    global _start
+	global _start
 
 _start:
-    xor rsi, rsi            ; rsi = 0 (index for array)
-    xor rdi, rdi            ; rdi = 0 (index for even)
+	mov rsi, 0          ; initialize rsi to 0
+	mov rdi, 0          ; initialize rdi to 0
 
-do_while:
-    cmp rsi, 7              ; Check if rsi >= 7 (end of array)
-    jge done                ; If yes, exit the loop
-    
-    lea rdx, [rsi * 2] 
-    movzx ax,[array + rdx]  ; Load array[rsi] into ax (16-bit)
-    test ax, 1              ; Test if ax is odd (ax % 2 == 1)
-    jnz not_even            ; If odd, skip to the next iteration
+loop_start:
+	movzx eax, word [array + rsi*2]  ; load array element into eax (16-bit)
+	mov ebx, eax			 ; mov eax value to bax
+	and eax, 1              	 ; check if eax value is even
+	jnz next_array_element  	 ; if odd, skip to next element
 
-    lea rdx, [rdi * 2]
-    mov [even + rdx], ax  ; Copy the even number to even[rdi]
-    inc rdi                 ; Increment rdi (next slot in even array)
+	; only comes here if element is even
+	mov [even_array + rdi*2], ebx 	; copy even element to even array
+	inc rdi               		; increment rdi
 
-not_even:
-    inc rsi                 ; Increment rsi (next element in array)
-    jmp do_while            ; Repeat the loop
+next_array_element:
+	inc rsi               ; increment rsi
+	cmp rsi, 7            ; check if rsi < 7
+	jl loop_start         ; if yes, loop again
 
-done:
-    ; Exit program
-    mov rax, 60             ; Syscall number for exit
-    xor rdi, rdi            ; Exit code 0
-    syscall
-
-
+	; Exit program
+	mov eax, 60
+	xor edi, edi
+	syscallls
