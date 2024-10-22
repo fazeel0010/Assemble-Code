@@ -1,6 +1,7 @@
 section .data
 	array times 7 dw 12, 1003, 6543, 24680, 789, 30123, 32766
 	even times 7 dw 0
+	temp dw 0
 
 section .text
 	global _start
@@ -11,10 +12,11 @@ _start:
 
 loop_start:
 	movzx eax, word [array + rsi*2]  ; load array element into eax (16-bit)
+	mov temp, eax
 	and eax, 1              ; check if eax is even
 	jnz next_element      ; if odd, skip to next element
 
-	mov [even + rdi*2], ax ; copy even element to even array
+	mov [even + rdi*2], temp ; copy even element to even array
 	inc rdi               ; increment rdi
 
 next_element:
