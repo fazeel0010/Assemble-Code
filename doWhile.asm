@@ -13,12 +13,14 @@ _start:
 do_while:
     cmp rsi, 7              ; Check if rsi >= 7 (end of array)
     jge done                ; If yes, exit the loop
-
-    movzx ax,[array + 0]  ; Load array[rsi] into ax (16-bit)
+    
+    lea rdx, [rsi * 2] 
+    movzx ax,[array + rdx]  ; Load array[rsi] into ax (16-bit)
     test ax, 1              ; Test if ax is odd (ax % 2 == 1)
     jnz not_even            ; If odd, skip to the next iteration
 
-    mov [even + 0], ax  ; Copy the even number to even[rdi]
+    lea rdx, [rdi * 2]
+    mov [even + rdx], ax  ; Copy the even number to even[rdi]
     inc rdi                 ; Increment rdi (next slot in even array)
 
 not_even:
