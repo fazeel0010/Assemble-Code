@@ -12,11 +12,11 @@ _start:
 
 loop_start:
 	movzx eax, word [array + rsi*2]  ; load array element into eax (16-bit)
-	mov temp, eax
+	mov ebx, eax
 	and eax, 1              ; check if eax is even
 	jnz next_element      ; if odd, skip to next element
 
-	mov [even + rdi*2], temp ; copy even element to even array
+	mov [even + rdi*2], ebx ; copy even element to even array
 	inc rdi               ; increment rdi
 
 next_element:
