@@ -1,6 +1,6 @@
 section .data
 	array times 7 dw 12, 1003, 6543, 24680, 789, 30123, 32766 	; declare static array
-	even_array times 7 dw 0 						; declare empty array for even
+	even_array times 7 dw 0 	; declare empty array for even
 
 section .text
 	global _start
@@ -24,7 +24,7 @@ next_array_element:
 	cmp rsi, 7            ; check if rsi < 7
 	jl loop_start         ; if yes, loop again
 
-	; Exit program
+	; exit program
 	mov eax, 60
 	xor edi, edi
-	syscallls
+	syscall
