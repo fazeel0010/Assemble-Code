@@ -5,8 +5,8 @@ section .data
     staff_size equ 56
 
     ; Badger structure
-    struct Badger
-        id resd 1
+    struct_badger:
+        id resd 1	
         name resb 50
         home resb 20
         mass resd 1
@@ -17,7 +17,7 @@ section .data
         keeper_id resd 1
 
     ; Staff structure
-    struct Staff
+    struct_staff:
         id resd 1
         surname resb 50
         first_name resb 50
@@ -27,8 +27,8 @@ section .data
         email resb 100
 
     ; Arrays to store badgers and staff
-    badgers times max_badgers struct Badger
-    staff times max_staff struct Staff
+    badgers times max_badgers struct_badger
+    staff times max_staff struct_staff
 
     ; Current indices
     badger_count resd 0
