@@ -6,6 +6,7 @@ section .data
 
 section .bss
     i resq 1
+    buf resb max_length
 
 section .text
     global _start
@@ -22,16 +23,27 @@ loop_start:
     mov rdx, 12         ; length of prompt
     syscall
 
-    ; Calculate address for reading name
+    ; Read name
+    mov rax, 0          ; sys_read
+    mov rdi, 0          ; file descriptor (stdin)
+    mov rsi, buf        ; buffer to store input
+    mov rdx, max_length ; max length to read
+    syscall
+
+    ; Check if read operation was successful
+    cmp rax, 0
+    jl error
+
+    ; Null-terminate the input string
+    mov byte [buf + rax], 0
+
+    ; Store input in names array
     mov rsi, [i]
     imul rsi, max_length
     lea rdi, [names + rsi]
-
-    ; Read name
-    mov rax, 0          ; sys_read
-    mov rsi, 0          ; file descriptor (stdin)
-    mov rdx, max_length ; max length to read
-    syscall
+    mov rsi, buf
+    mov rdx, max_length
+    call strcpy
 
     ; Increment loop counter
     add qword [i], 1
@@ -45,3 +57,20 @@ loop_start:
     xor rdi, rdi
     mov rax, 60
     syscall
+
+error:
+    ; Handle error
+    mov rax, 60
+    mov rdi, 1
+    syscall
+
+; Simple strcpy function
+strcpy:
+    mov rsi, [rsi]
+    mov [rdi], rsi
+    add rdi, 1
+    add rsi, 1
+    dec rdx
+    cmp rdx, 0
+    jg strcpy
+    ret
