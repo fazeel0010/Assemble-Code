@@ -1,17 +1,17 @@
 section .data
     max_names equ 100
     max_length equ 100
-    prompt db "Enter name %d: ", 0
+    prompt db "Enter name: ", 0
     names times max_names * max_length db 0
 
 section .bss
     i resq 1
 
 section .text
-    global main
+    global _start
     extern printf, scanf
 
-main:
+_start:
     ; Initialize loop counter
     mov qword [i], 0
 
