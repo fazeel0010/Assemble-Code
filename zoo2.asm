@@ -22,10 +22,14 @@ loop_start:
     mov rdx, 12         ; length of prompt
     syscall
 
+    ; Calculate address for reading name
+    mov rsi, [i]
+    imul rsi, max_length
+    lea rdi, [names + rsi]
+
     ; Read name
     mov rax, 0          ; sys_read
-    mov rdi, 0          ; file descriptor (stdin)
-    lea rsi, [names + rsi * max_length]
+    mov rsi, 0          ; file descriptor (stdin)
     mov rdx, max_length ; max length to read
     syscall
 
