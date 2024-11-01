@@ -9,7 +9,6 @@ section .bss
 
 section .text
     global _start
-    extern printf, scanf
 
 _start:
     ; Initialize loop counter
@@ -17,23 +16,18 @@ _start:
 
 loop_start:
     ; Print prompt
-    mov rdi, prompt
-    mov rsi, [i]
-    add rsi, 1
-    call printf
+    mov rax, 1          ; sys_write
+    mov rdi, 1          ; file descriptor (stdout)
+    mov rsi, prompt
+    mov rdx, 12         ; length of prompt
+    syscall
 
     ; Read name
-    mov rdi, names
-    mov rsi, [i]
-    mov rsi, rsi
-    mov rdx, rsi
-    imul rdx, max_length
-    lea rdi, [names + rdx]
-
-    ;lea rdi, [names + rsi * max_length]
-    ;mov rdi, [names + rsi * max_length]
-    mov rsi, rdi
-    call scanf
+    mov rax, 0          ; sys_read
+    mov rdi, 0          ; file descriptor (stdin)
+    lea rsi, [names + rsi * max_length]
+    mov rdx, max_length ; max length to read
+    syscall
 
     ; Increment loop counter
     add qword [i], 1
@@ -44,4 +38,6 @@ loop_start:
 
     ; Exit program
     xor rax, rax
-    ret
+    xor rdi, rdi
+    mov rax, 60
+    syscall
