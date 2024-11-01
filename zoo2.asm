@@ -26,7 +26,8 @@ loop_start:
     mov rdi, names
     mov rsi, [i]
     mov rsi, rsi
-    mov rdi, [names + rsi * max_length]
+    lea rdi, [names + rsi * max_length]
+    ;mov rdi, [names + rsi * max_length]
     mov rsi, rdi
     call scanf
 
